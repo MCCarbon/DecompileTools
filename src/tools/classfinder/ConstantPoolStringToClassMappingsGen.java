@@ -1,4 +1,4 @@
-package tools.mappinggen;
+package tools.classfinder;
 
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;

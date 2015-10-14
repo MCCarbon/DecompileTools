@@ -1,4 +1,4 @@
-package tools.mappinggen;
+package tools.renamers;
 
 import java.io.PrintWriter;
 import java.util.jar.JarEntry;
@@ -9,10 +9,10 @@ import tools.utils.MappingUtils;
 import tools.utils.RootLevelJarIterate;
 import tools.utils.Utils;
 
-public class ClassRenameMappingsGen implements Tool {
+public class AllClassesRenamer implements Tool {
 
 	private String[] args;
-	public ClassRenameMappingsGen(String args[]) {
+	public AllClassesRenamer(String args[]) {
 		this.args = args;
 	}
 

@@ -4,19 +4,19 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import tools.mappinggen.ClassByStringConstantPoolFinder;
-import tools.mappinggen.ConstantPoolStringToClassMappingsGen;
-import tools.mappinggen.EnumNameRestorer;
-import tools.mappinggen.ClassRenameMappingsGen;
+import tools.classfinder.ClassByStringConstantPoolFinder;
+import tools.classfinder.ConstantPoolStringToClassMappingsGen;
+import tools.renamers.AllClassesRenamer;
+import tools.renamers.EnumConstNameRestorer;
 
 public class EntryPoint {
 
 	private static final HashMap<String, Class<? extends Tool>> tools = new HashMap<String, Class<? extends Tool>>();
 	static {
-		tools.put("mappings", ClassRenameMappingsGen.class);
-		tools.put("classfinder", ClassByStringConstantPoolFinder.class);
-		tools.put("enumfixer", EnumNameRestorer.class);
-		tools.put("classfindermappings", ConstantPoolStringToClassMappingsGen.class);
+		tools.put("ClassFinderFind", ClassByStringConstantPoolFinder.class);
+		tools.put("ClassFinderGenerate", ConstantPoolStringToClassMappingsGen.class);
+		tools.put("ClassesRename", AllClassesRenamer.class);
+		tools.put("EnumConstantsRestore", EnumConstNameRestorer.class);
 	}
 
 	public static void main(String args[]) {

@@ -1,4 +1,4 @@
-package tools.mappinggen;
+package tools.classfinder;
 
 import java.io.File;
 import java.io.PrintWriter;

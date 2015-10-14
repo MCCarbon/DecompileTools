@@ -1,4 +1,4 @@
-package tools.mappinggen;
+package tools.renamers;
 
 import java.io.PrintWriter;
 import java.util.Arrays;
@@ -23,10 +23,10 @@ import tools.utils.MappingUtils;
 import tools.utils.RootLevelJarIterate;
 import tools.utils.Utils;
 
-public class EnumNameRestorer implements Tool {
+public class EnumConstNameRestorer implements Tool {
 
 	private String[] args;
-	public EnumNameRestorer(String args[]) {
+	public EnumConstNameRestorer(String args[]) {
 		this.args = args;
 	}
 
