@@ -8,19 +8,16 @@ import java.util.Map.Entry;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import tools.EntryPoint;
 import tools.Tool;
 import tools.utils.EnumerationIterator;
 import tools.utils.Utils;
 
 public class ConstantPoolStringToClassMappingsGen implements Tool {
 
-	private String[] args;
-	public ConstantPoolStringToClassMappingsGen(String args[]) {
-		this.args = args;
-	}
-
 	@Override
 	public void run() {
+		String args[] = EntryPoint.getArgs();
 		String jarfilename = args[0];
 		String scanpath = args[1];
 		String mappingsfilename = args[2];

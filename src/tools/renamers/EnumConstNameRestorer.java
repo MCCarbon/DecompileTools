@@ -18,6 +18,7 @@ import com.sun.org.apache.bcel.internal.generic.MethodGen;
 import com.sun.org.apache.bcel.internal.generic.NEW;
 import com.sun.org.apache.bcel.internal.generic.PUTSTATIC;
 
+import tools.EntryPoint;
 import tools.Tool;
 import tools.utils.MappingUtils;
 import tools.utils.RootLevelJarIterate;
@@ -25,13 +26,9 @@ import tools.utils.Utils;
 
 public class EnumConstNameRestorer implements Tool {
 
-	private String[] args;
-	public EnumConstNameRestorer(String args[]) {
-		this.args = args;
-	}
-
 	@Override
 	public void run() {
+		String args[] = EntryPoint.getArgs();
 		String jarfilename = args[0];
 		String mappingsfilename = args[1];
 		try (PrintWriter writer = new PrintWriter(mappingsfilename); JarFile file = new JarFile(jarfilename)) {

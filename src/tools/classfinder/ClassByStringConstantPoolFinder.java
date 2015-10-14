@@ -13,6 +13,7 @@ import java.util.Scanner;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import tools.EntryPoint;
 import tools.Tool;
 import tools.utils.MappingUtils;
 import tools.utils.RootLevelJarIterate;
@@ -20,13 +21,9 @@ import tools.utils.Utils;
 
 public class ClassByStringConstantPoolFinder implements Tool {
 
-	private String[] args;
-	public ClassByStringConstantPoolFinder(String args[]) {
-		this.args = args;
-	}
-
 	@Override
 	public void run() {
+		String args[] = EntryPoint.getArgs();
 		String jarfilename = args[0];
 		String finderfilename = args[1];
 		String mappingsfilename = args[2];
