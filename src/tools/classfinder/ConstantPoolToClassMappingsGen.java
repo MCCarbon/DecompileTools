@@ -35,7 +35,7 @@ public class ConstantPoolToClassMappingsGen implements Tool {
 				String fullClassName = Utils.stripClassEnding(jarEntry.getName());
 				Set<Object> classConstants = ClassFinderHelpers.getConstantPool(inputJarFile.getInputStream(jarEntry), fullClassName);
 				if (!classToConstants.containsValue(classConstants)) {
-					classToConstants.put(Utils.lastName(fullClassName), classConstants);
+					classToConstants.put(fullClassName, classConstants);
 				}
 			}
 			new GsonBuilder()

@@ -7,12 +7,4 @@ public class Utils {
 		return string.substring(0, string.length() - classLength);
 	}
 
-	public static String lastName(String string) {
-		int lastIndex = string.lastIndexOf('/');
-		if (lastIndex == -1) {
-			return string;
-		}
-		return string.substring(lastIndex + 1, string.length());
-	}
-
 }
