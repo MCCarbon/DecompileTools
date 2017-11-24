@@ -6,22 +6,22 @@ import java.util.Iterator;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import com.sun.org.apache.bcel.internal.classfile.ClassParser;
-import com.sun.org.apache.bcel.internal.classfile.JavaClass;
-import com.sun.org.apache.bcel.internal.classfile.Method;
-import com.sun.org.apache.bcel.internal.generic.ClassGen;
-import com.sun.org.apache.bcel.internal.generic.ConstantPoolGen;
-import com.sun.org.apache.bcel.internal.generic.INVOKESPECIAL;
-import com.sun.org.apache.bcel.internal.generic.Instruction;
-import com.sun.org.apache.bcel.internal.generic.LDC;
-import com.sun.org.apache.bcel.internal.generic.MethodGen;
-import com.sun.org.apache.bcel.internal.generic.NEW;
-import com.sun.org.apache.bcel.internal.generic.PUTSTATIC;
+import org.apache.bcel.classfile.ClassParser;
+import org.apache.bcel.classfile.JavaClass;
+import org.apache.bcel.classfile.Method;
+import org.apache.bcel.generic.ClassGen;
+import org.apache.bcel.generic.ConstantPoolGen;
+import org.apache.bcel.generic.INVOKESPECIAL;
+import org.apache.bcel.generic.Instruction;
+import org.apache.bcel.generic.LDC;
+import org.apache.bcel.generic.MethodGen;
+import org.apache.bcel.generic.NEW;
+import org.apache.bcel.generic.PUTSTATIC;
 
 import tools.EntryPoint;
 import tools.Tool;
+import tools.utils.EnumerationIterator;
 import tools.utils.MappingUtils;
-import tools.utils.RootLevelJarIterate;
 import tools.utils.Utils;
 
 public class EnumConstNameRestorer implements Tool {
@@ -29,12 +29,18 @@ public class EnumConstNameRestorer implements Tool {
 	@Override
 	public void run() {
 		String args[] = EntryPoint.getArgs();
-		String jarfilename = args[0];
-		String mappingsfilename = args[1];
-		try (PrintWriter writer = new PrintWriter(mappingsfilename); JarFile file = new JarFile(jarfilename)) {
-			for (JarEntry entry : new RootLevelJarIterate(file)) {
-				String original = Utils.stripClassEnding(entry.getName());
-				JavaClass clazz = new ClassParser(file.getInputStream(entry), original).parse();
+		String inputJarFileName = args[0];
+		String outputSrgMappingsFileName = args[1];
+		try (
+			PrintWriter outputSrgMappingWriter = new PrintWriter(outputSrgMappingsFileName);
+			JarFile inputJarFile = new JarFile(inputJarFileName)
+		) {
+			for (JarEntry jarEntry : new EnumerationIterator<>(inputJarFile.entries())) {
+				if (jarEntry.isDirectory() || !jarEntry.getName().endsWith(".class")) {
+					continue;
+				}
+				String original = Utils.stripClassEnding(jarEntry.getName());
+				JavaClass clazz = new ClassParser(inputJarFile.getInputStream(jarEntry), original).parse();
 				if (isEnumClass(clazz)) {
 					Method staticInit = getCLInit(clazz);
 					//skip enums with no static init method
@@ -72,7 +78,7 @@ public class EnumConstNameRestorer implements Tool {
 						PUTSTATIC putstatic = (PUTSTATIC) instrIter.next();
 						String obfName = putstatic.getFieldName(cpGen);
 						//now print the mapping
-						writer.println(MappingUtils.createSRG(clazz.getClassName(), obfName, realName));
+						outputSrgMappingWriter.println(MappingUtils.createSRG(clazz.getClassName(), obfName, realName));
 					}
 				}
 			}
