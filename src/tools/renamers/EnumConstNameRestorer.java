@@ -41,7 +41,7 @@ public class EnumConstNameRestorer implements Tool {
 				}
 				String original = Utils.stripClassEnding(jarEntry.getName());
 				JavaClass clazz = new ClassParser(inputJarFile.getInputStream(jarEntry), original).parse();
-				if (isEnumClass(clazz)) {
+				if (clazz.isEnum()) {
 					Method staticInit = getCLInit(clazz);
 					//skip enums with no static init method
 					if (staticInit == null) {
@@ -94,10 +94,6 @@ public class EnumConstNameRestorer implements Tool {
 			}
 		}
 		return null;
-	}
-
-	private boolean isEnumClass(JavaClass clazz) {
-		return ((clazz.getModifiers() & 0x00004000) != 0);
 	}
 
 }

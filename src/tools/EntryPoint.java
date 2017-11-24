@@ -5,6 +5,8 @@ import java.util.HashMap;
 
 import tools.classfinder.ClassByConstantPoolFinder;
 import tools.classfinder.ConstantPoolToClassMappingsGen;
+import tools.fieldfinder.FieldBySignatureFinder;
+import tools.fieldfinder.FieldSignatureMappingsGen;
 import tools.renamers.AllClassesRenamer;
 import tools.renamers.EnumConstNameRestorer;
 
@@ -17,8 +19,10 @@ public class EntryPoint {
 
 	private static final HashMap<String, Class<? extends Tool>> tools = new HashMap<String, Class<? extends Tool>>();
 	static {
-		tools.put("ClassFinderFind", ClassByConstantPoolFinder.class);
 		tools.put("ClassFinderGenerate", ConstantPoolToClassMappingsGen.class);
+		tools.put("ClassFinderFind", ClassByConstantPoolFinder.class);
+		tools.put("FieldFinderGenerate", FieldSignatureMappingsGen.class);
+		tools.put("FieldFinderFind", FieldBySignatureFinder.class);
 		tools.put("ClassesRename", AllClassesRenamer.class);
 		tools.put("EnumConstantsRestore", EnumConstNameRestorer.class);
 	}
