@@ -39,8 +39,8 @@ public class ClassByConstantPoolFinder implements Tool {
 			Reader inputMappingsReader = new InputStreamReader(new FileInputStream(new File(inputMappingsFileName)), StandardCharsets.UTF_8.toString())
 		) {
 			Map<String, Set<Object>> classToConstants = new Gson().fromJson(inputMappingsReader, ClassFinderHelpers.MAPPINGS_JSON_FORMAT_TYPE_TOKEN);
-			Map<String, PossibleClass> possibleSrgMappings = new HashMap<String, PossibleClass>();
-			//base finding
+			Map<String, PossibleClass> bestMatchMappings = new HashMap<String, PossibleClass>();
+			//find best match for obfuscated class
 			for (JarEntry jarEntry : new EnumerationIterator<>(inputJarFile.entries())) {
 				if (jarEntry.isDirectory() || !jarEntry.getName().endsWith(".class")) {
 					continue;
@@ -58,14 +58,22 @@ public class ClassByConstantPoolFinder implements Tool {
 							}
 						}
 					}
-					if (possibleSrgMappings.getOrDefault(fentry.getKey(), PossibleClass.ZERO).weight < classWeight) {
-						possibleSrgMappings.put(fentry.getKey(), new PossibleClass(fullClassName, classWeight));
+					if (bestMatchMappings.getOrDefault(fullClassName, PossibleClass.ZERO).weight < classWeight) {
+						bestMatchMappings.put(fullClassName, new PossibleClass(fentry.getKey(), classWeight));
 					}
+				}
+			}
+			//deduplicate mappings
+			Map<String, PossibleClass> uniqueMappings = new HashMap<String, PossibleClass>();
+			for (Entry<String, PossibleClass> entry : bestMatchMappings.entrySet()) {
+				String targetName = entry.getValue().name;
+				if (uniqueMappings.getOrDefault(targetName, PossibleClass.ZERO).weight < entry.getValue().weight) {
+					uniqueMappings.put(targetName, new PossibleClass(entry.getKey(), entry.getValue().weight));
 				}
 			}
 			//inner class deepest hierarchy check
 			Map<String, DeepestClass> deepestMappings = new HashMap<>();
-			for (Entry<String, PossibleClass> entry : possibleSrgMappings.entrySet()) {
+			for (Entry<String, PossibleClass> entry : uniqueMappings.entrySet()) {
 				String[] sourceName = entry.getValue().name.split("[$]");
 				String[] targetName = entry.getKey().split("[$]");
 				if (sourceName.length == targetName.length) {
