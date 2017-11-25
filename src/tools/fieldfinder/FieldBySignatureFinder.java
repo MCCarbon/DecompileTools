@@ -48,7 +48,8 @@ public class FieldBySignatureFinder implements Tool {
 						if (FieldFinderHelpers.shouldIgnoreField(clazz, field)) {
 							continue;
 						}
-						List<String> names = localFieldMappingsByType.get(field.getSignature());
+						String signature = field.getGenericSignature() != null ? field.getGenericSignature() : field.getSignature();
+						List<String> names = localFieldMappingsByType.get(signature);
 						if (names != null && !names.isEmpty()) {
 							outputSrgMappingWriter.println(MappingUtils.createSRG(fullClassName, field.getName(), names.remove(0)));
 						}

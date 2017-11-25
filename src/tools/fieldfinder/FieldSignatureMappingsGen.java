@@ -47,7 +47,8 @@ public class FieldSignatureMappingsGen implements Tool {
 					if (field.getName().length() < minFieldNameLength) {
 						continue;
 					}
-					localFieldMappingsByType.compute(field.getSignature(), (ftype, names) -> {
+					String signature = field.getGenericSignature() != null ? field.getGenericSignature() : field.getSignature();
+					localFieldMappingsByType.compute(signature, (ftype, names) -> {
 						if (names == null) {
 							names = new ArrayList<>();
 						}
