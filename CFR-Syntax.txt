@@ -1,0 +1,1 @@
+java -jar cfr-0.152.jar <path to JAR file> --outputdir <path to directory>

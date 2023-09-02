@@ -1,0 +1,1 @@
+java -cp SpecialSource-1.10.0.jar;*;. net.md_5.specialsource.SpecialSource --in-jar <path to JAR file> --out-jar <path to deobfuscated JAR file> --srg-in <path to mappings> --kill-lvt
